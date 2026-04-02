@@ -191,21 +191,8 @@ const cities = [
     { name: "Charlottetown, PE", lat: 46.2382, lon: -63.1311 },
     { name: "Whitehorse, YT", lat: 60.7212, lon: -135.0568 },
     { name: "Yellowknife, NT", lat: 62.4540, lon: -114.3718 },
-    { name: "Iqaluit, NU", lat: 63.7467, lon: -68.5170 },
+    { name: "Iqaluit, NU", lat: 63.7467, lon: -68.5170 }
 	
-    // --- ОРОСЫН ХОЛБООНЫ УЛС (Томоохон хотууд) ---
-    { name: "Moscow, Russia", lat: 55.7558, lon: 37.6173 },
-    { name: "Saint Petersburg, Russia", lat: 59.9311, lon: 30.3609 },
-    { name: "Novosibirsk, Russia", lat: 55.0084, lon: 82.9357 },
-    { name: "Yekaterinburg, Russia", lat: 56.8389, lon: 60.6057 },
-    { name: "Kazan, Russia", lat: 55.8304, lon: 49.0661 },
-    { name: "Vladivostok, Russia", lat: 43.1198, lon: 131.8869 },
-    { name: "Irkutsk, Russia", lat: 52.2870, lon: 104.2810 },
-    { name: "Ulan-Ude, Russia", lat: 51.8235, lon: 107.6065 },
-    { name: "Krasnoyarsk, Russia", lat: 56.0153, lon: 92.8932 },
-    { name: "Chelyabinsk, Russia", lat: 55.1644, lon: 61.4368 },
-    { name: "Sochi, Russia", lat: 43.6028, lon: 39.7233 }
-
 ];
 
 // Хотуудыг зураг дээр дугуй цэгээр зурах
@@ -278,7 +265,10 @@ const europeanCapitals = [
     { name: "Bern, Switzerland", lat: 46.9480, lon: 7.4474 },
     { name: "London, United Kingdom", lat: 51.5074, lon: -0.1278 },
     { name: "Kiev, Ukraine", lat: 50.4501, lon: 30.5234 },
-    { name: "Vatican City", lat: 41.9029, lon: 12.4534 }
+    { name: "Vatican City", lat: 41.9029, lon: 12.4534 },
+
+	    // Бусад бүс нутаг
+    { name: "Nuuk, Greenland", lat: 64.1835, lon: -51.7216 }
 ];
 
 // Хотуудыг нэмэх функц (Таны кодын cities массив дотор нэмж болно)
@@ -344,6 +334,19 @@ const asianCapitals = [
     { name: "Nanjing, China", lat: 32.0603, lon: 118.7969 },
     { name: "Harbin, China", lat: 45.8038, lon: 126.5350 },
     { name: "Erenhot, China", lat: 43.6534, lon: 111.9740 },
+
+	// --- ОРОСЫН ХОЛБООНЫ УЛС (Томоохон хотууд) ---
+    { name: "Moscow, Russia", lat: 55.7558, lon: 37.6173 },
+    { name: "Saint Petersburg, Russia", lat: 59.9311, lon: 30.3609 },
+    { name: "Novosibirsk, Russia", lat: 55.0084, lon: 82.9357 },
+    { name: "Yekaterinburg, Russia", lat: 56.8389, lon: 60.6057 },
+    { name: "Kazan, Russia", lat: 55.8304, lon: 49.0661 },
+    { name: "Vladivostok, Russia", lat: 43.1198, lon: 131.8869 },
+    { name: "Irkutsk, Russia", lat: 52.2870, lon: 104.2810 },
+    { name: "Ulan-Ude, Russia", lat: 51.8235, lon: 107.6065 },
+    { name: "Krasnoyarsk, Russia", lat: 56.0153, lon: 92.8932 },
+    { name: "Chelyabinsk, Russia", lat: 55.1644, lon: 61.4368 },
+    { name: "Sochi, Russia", lat: 43.6028, lon: 39.7233 },
 	
     { name: "Kabul, Afghanistan", lat: 34.5553, lon: 69.2075 },
     { name: "Yerevan, Armenia", lat: 40.1792, lon: 44.5152 },
@@ -422,9 +425,7 @@ asianCapitals.forEach(city => {
 
 // ХОЙД/ТӨВ АМЕРИК ТИВ НИЙСЛЭЛҮҮД
 const northAmericanCapitals = [
-    // Хойд Америк (Том гүрнүүд)
-    { name: "Ottawa, Canada", lat: 45.4215, lon: -75.6972 },
-    { name: "Washington D.C., USA", lat: 38.8951, lon: -77.0364 },
+    // Хойд Америк
     { name: "Mexico City, Mexico", lat: 19.4326, lon: -99.1332 },
 
     // Төв Америк
@@ -449,17 +450,15 @@ const northAmericanCapitals = [
     { name: "Basseterre, St. Kitts and Nevis", lat: 17.2990, lon: -62.7324 },
     { name: "Castries, St. Lucia", lat: 14.0101, lon: -60.9875 },
     { name: "Kingstown, St. Vincent and the Grenadines", lat: 13.1560, lon: -61.2248 },
-    { name: "Port of Spain, Trinidad and Tobago", lat: 10.6667, lon: -61.5167 },
+    { name: "Port of Spain, Trinidad and Tobago", lat: 10.6667, lon: -61.5167 }
 
-    // Бусад бүс нутаг
-    { name: "Nuuk, Greenland", lat: 64.1835, lon: -51.7216 }
 ];
 
 // Зураг дээр тэмдэглэх функц
 northAmericanCapitals.forEach(city => {
     L.circleMarker([city.lat, city.lon], {
         radius: 2,
-        fillColor: "#ff3300", // Хойд Америкийн хотуудыг улаан өнгөөр ялгав
+        fillColor: "#00ff00", // Хойд Америкийн хотуудыг улаан өнгөөр ялгав
         color: "#fff",
         weight: 0.5,
         opacity: 1,
@@ -587,7 +586,7 @@ const africanCapitals = [
 africanCapitals.forEach(city => {
     L.circleMarker([city.lat, city.lon], {
         radius: 2,
-        fillColor: "#ffa500", // Африкийн хотуудыг улбар шар өнгөөр ялгав
+        fillColor: "#ff3300", // Африкийн хотуудыг улбар шар өнгөөр ялгав
         color: "#fff",
         weight: 0.5,
         opacity: 1,
