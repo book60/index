@@ -3,133 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Podcast Player</title>
+    <title>Podcast Player - UI Update</title>
     <style>
+        /* Ерөнхий тохиргоо */
         :root {
-            --primary: #6366f1;
-            --bg: #091534;
-            --card: #D4E4F7;
-            --text: #236AB9;
+            --primary: #1e293b;
+            --bg-page: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-main: #334155;
             --text-light: #64748b;
+            --border-color: #e2e8f0;
+            --blue-accent: #3b82f6;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-page);
             display: flex;
             justify-content: center;
             padding: 20px;
+            margin: 0;
         }
 
         .container {
             width: 100%;
-            max-width: 600px;
-            background: var(--card);
-            padding: 2rem;
-            border-radius: 24px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            background: var(--bg-card);
+            border-radius: 40px;
+            padding: 30px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+            text-align: center;
         }
 
-        /* Player UI */
-        .podcast-header { text-align: center; margin-bottom: 1.5rem; }
+        /* 1. КОВЕР ЗУРАГ */
         .cover-art {
-            width: 180px; height: 180px;
-            border-radius: 16px;
-            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-            margin: 0 auto 1rem;
-            display: flex; align-items: center; justify-content: center;
-            color: white; font-size: 3rem;
+            width: 240px;
+            height: 240px;
+            border: 0px solid #000;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            object-fit: cover;
         }
 
-        audio { width: 100%; margin-top: 1rem; border-radius: 8px; }
+        h2 { margin: 10px 0 5px; font-size: 1.6rem; color: #000; }
+        .subtitle { color: var(--text-light); font-size: 0.9rem; margin-bottom: 25px; }
 
-        /* Timestamps */
-        .timestamps { margin-top: 1.5rem; border-top: 1px solid #e2e8f0; padding-top: 1rem; }
-        .timestamp-item {
-            display: flex; justify-content: space-between;
-            padding: 10px; border-radius: 8px;
-            cursor: pointer; transition: 0.2s;
+        /* 2. АУДИО ПЛЕЙР */
+        .player-container {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 10px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
         }
-        .timestamp-item:hover { background: #f1f5f9; color: var(--primary); }
-        .time-code { font-weight: bold; color: var(--primary); }
+        audio { width: 100%; }
 
-        /* Social Share */
-        .share-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-            gap: 10px; margin-top: 2rem;
+        /* 3. ТЕКСТ БЛОК (Дугаарын тойм) */
+        .episode-description {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: left;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-main);
+            margin-bottom: 30px;
         }
+
+        .section-title {
+            text-align: left;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--text-light);
+            margin-bottom: 15px;
+            letter-spacing: 0.05em;
+        }
+
+        /* 4. ГҮЙДЭГ ЖАГСААЛТ (SCROLLABLE LIST) */
+        .scroll-list {
+            max-height: 350px; /* Жагсаалт харуулах цонхны өндөр */
+            overflow-y: auto;  /* Урт бол гүйлгэдэг болгох */
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        /* Scrollbar-ыг гоё харагдуулах */
+        .scroll-list::-webkit-scrollbar { width: 6px; }
+        .scroll-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .list-item:last-child { border-bottom: none; }
+        .list-item:hover { background: #f8fafc; }
+
+        .ep-meta { font-size: 0.75rem; color: var(--blue-accent); font-weight: 600; text-transform: uppercase; }
+        .ep-name { font-size: 0.95rem; color: var(--text-main); font-weight: 500; display: block; margin-top: 2px; }
+        .play-arrow { color: var(--text-light); font-size: 1.2rem; }
+
+        /* 5. ТҮГЭЭХ ТОВЧНУУД (Зураг дээрх шиг) */
+        .share-container {
+            background: #fff;
+            padding: 15px;
+            border-radius: 20px;
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
         .share-btn {
-            padding: 8px; border: 1px solid #e2e8f0; border-radius: 12px;
-            text-decoration: none; font-size: 0.8rem; text-align: center;
-            color: var(--text-light); transition: 0.3s;
+            flex: 1;
+            background: #fff;
+            border: 1px solid #dbeafe;
+            border-radius: 12px;
+            padding: 8px 5px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: transform 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .share-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
+        .share-btn:active { transform: scale(0.95); }
 
-        /* Custom Audio Control (Simplified for low data) */
-        .custom-player { background: #f1f5f9; padding: 15px; border-radius: 15px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="podcast-header">
-        <img src="https://www.coverartmarket.com/cde/images/1738160155-lost-girl.jpg" alt="Podcast Cover" class="cover-art">
-        <h2 id="title">Дугаарын гарчиг #01</h2>
-        <p style="color: var(--text-light)">Ухаалаг систем ба Ирээдүй</p>
-    </div>
+    <img src="https://www.coverartmarket.com/cde/images/1738160155-lost-girl.jpg" alt="Cover" class="cover-art">
 
-    <div class="custom-player">
+    <h2>Дугаар #01</h2>
+    <p class="subtitle">Төслийн менежмент ба AI</p>
+
+    <div class="player-container">
         <audio id="audioPlayer" controls>
             <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-            Таны хөтөч аудио тоглуулагчийг дэмжихгүй байна.
         </audio>
     </div>
 
-    <div class="timestamps">
-        <h4 style="margin-bottom: 10px;">Хөтөлбөр:</h4>
-        <div class="timestamp-item" onclick="seekAudio(0)">
-            <span>Эхлэл ба мэндчилгээ</span>
-            <span class="time-code">00:00</span>
-        </div>
-        <div class="timestamp-item" onclick="seekAudio(45)">
-            <span>Гол сэдэв: AI хэрэглээ</span>
-            <span class="time-code">00:45</span>
-        </div>
-        <div class="timestamp-item" onclick="seekAudio(120)">
-            <span>Зочны зөвлөгөө</span>
-            <span class="time-code">03:19</span>
-        </div>
+    <div class="episode-description">
+        Дугаарын тухай тойм, хөндөгдөж байгаа сэдэв оруулах текст блок. Дизайн нь доор байгаа дугааруудын жагсаалт шиг, сайз ч бас адил.
     </div>
 
-    <div class="share-grid">
-        <a href="#" class="share-btn" onclick="shareFB()">Facebook</a>
-        <a href="#" class="share-btn" onclick="shareTwitter()">Twitter</a>
-        <a href="sms:?body=Энэ подкастыг сонсоорой: " class="share-btn">SMS</a>
-        <a href="mailto:?subject=Подкаст санал болгох&body=Үүнийг үзээрэй: " class="share-btn">Email</a>
-        <a href="#" class="share-btn" onclick="copyLink()">Линк хуулах</a>
+    <div class="section-title">Өмнөх дугаарууд</div>
+    
+    <div class="scroll-list">
+        <a href="#" class="list-item">
+            <div><span class="ep-meta">EPISODE #02</span><span class="ep-name">Хөрөнгө оруулалтын үндэс</span></div>
+            <span class="play-arrow">▶</span>
+        </a>
+        <a href="#" class="list-item">
+            <div><span class="ep-meta">EPISODE #03</span><span class="ep-name">Дижитал маркетингийн нууц</span></div>
+            <span class="play-arrow">▶</span>
+        </a>
+        <a href="#" class="list-item">
+            <div><span class="ep-meta">EPISODE #04</span><span class="ep-name">Хувийн санхүүгээ удирдах нь</span></div>
+            <span class="play-arrow">▶</span>
+        </a>
+        <a href="#" class="list-item">
+            <div><span class="ep-meta">EPISODE #05</span><span class="ep-name">Амжилттай ярилцлага өгөх тактик</span></div>
+            <span class="play-arrow">▶</span>
+        </a>
+        <a href="#" class="list-item">
+            <div><span class="ep-meta">EPISODE #06</span><span class="ep-name">Багийн ажиллагаа ба манлайлал</span></div>
+            <span class="play-arrow">▶</span>
+        </a>
+        <a href="#" class="list-item">
+            <div><span class="ep-meta">EPISODE #07</span><span class="ep-name">Эрүүл мэнд ба бүтээмж</span></div>
+            <span class="play-arrow">▶</span>
+        </a>
+        <a href="#" class="list-item">
+            <div><span class="ep-meta">EPISODE #08</span><span class="ep-name">Ирээдүйн хотуудын дүр төрх</span></div>
+            <span class="play-arrow">▶</span>
+        </a>
+    </div>
+
+    <div class="section-title">Түгээх</div>
+    
+    <div class="share-container">
+        <a href="javascript:void(0)" onclick="shareFB()" class="share-btn">FACEBOOK</a>
+        <a href="javascript:void(0)" onclick="shareTwitter()" class="share-btn">TWITTER</a>
+        <a href="sms:?body=Сонсоорой: " class="share-btn">SMS</a>
+        <a href="mailto:?subject=Podcast&body=Үзээрэй: " class="share-btn">EMAIL</a>
+        <a href="javascript:void(0)" onclick="copyLink()" class="share-btn">COPY LINK</a>
     </div>
 </div>
 
 <script>
-    const player = document.getElementById('audioPlayer');
+    // Сошиал шейр хийх функцүүд
     const pageUrl = window.location.href;
-    const shareText = "Энэхүү сонирхолтой подкастыг сонсоорой!";
 
-    // Таймстамп руу үсрэх функц
-    function seekAudio(seconds) {
-        player.currentTime = seconds;
-        player.play();
-    }
-
-    // Сошиал шейр функцүүд
     function shareFB() {
         window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pageUrl)}`, '_blank');
     }
 
     function shareTwitter() {
-        window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(pageUrl)}&text=${encodeURIComponent(shareText)}`, '_blank');
+        window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(pageUrl)}`, '_blank');
     }
 
     function copyLink() {
