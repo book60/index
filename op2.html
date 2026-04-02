@@ -1,211 +1,307 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Craftivo - Portfolio Template</title>
+    <meta charset="UTF-8">
+    <title>Deadline Dashboard - Fixed Layout</title>
+    <style>
+        :root {
+            --bg-color: #000000;
+            --text-color: #f0f0f0;
+            --accent-color: #4a90e2; 
+            --border-style: 1px solid rgba(255, 255, 255, 0.1);
+        }
 
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 80px;
+            display: flex;
+            justify-content: center;
+        }
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+        .main-wrapper {
+            display: flex;
+            gap: 100px;
+            max-width: 1400px;
+            width: 100%;
+        }
 
-  <style>
-    /* Үндсэн стиль */
-    :root {
-      --primary-color: #4eb1ba;
-      --secondary-color: #2d3e50;
-      --heading-font: 'Raleway', sans-serif;
-      --body-font: 'Roboto', sans-serif;
-    }
+        /* --- LEFT SIDE --- */
+        .content-area {
+            flex: 2;
+        }
 
-    body {
-      font-family: var(--body-font);
-      color: #444444;
-    }
+        #current-date {
+            font-size: 1.8rem;
+            font-weight: 300;
+            margin-bottom: 60px;
+            color: var(--text-color);
+            letter-spacing: 1px;
+        }
 
-    h1, h2, h3, h4, h5, h6 {
-      font-family: var(--heading-font);
-    }
+        .deadline-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
 
-    /* Header & Navigation */
-    #header {
-      height: 80px;
-      transition: all 0.5s;
-      z-index: 997;
-      background: #fff;
-      box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
-    }
+        .deadline-card {
+            background: var(--bg-color);
+        }
 
-    .nav-link {
-      color: var(--secondary-color);
-      font-weight: 500;
-    }
+        /* GRID LAYOUT: 
+           1st column: Name (Auto)
+           2nd column: Date?
+           3rd column: Remaining
+        */
+        .card-row-1 {
+            display: grid;
+            grid-template-columns: 1fr 2fr 100px; /* column size */
+            align-items: center;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: var(--border-style);
+        }
 
-    .nav-link:hover, .nav-link.active {
-      color: var(--primary-color);
-    }
+        .timer-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
-    /* Hero Section */
-    #hero {
-      width: 100%;
-      height: 90vh;
-      background: linear-gradient(rgba(45, 62, 80, 0.8), rgba(45, 62, 80, 0.8)), 
-                  url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1500&q=80') center center;
-      background-size: cover;
-      display: flex;
-      align-items: center;
-      color: #fff;
-    }
+        .target-date {
+            font-size: 1rem;
+            color: #bbb;
+            text-align: right; /* Date position */
+            padding-right: 40px;
+        }
 
-    #hero h1 {
-      font-size: 48px;
-      font-weight: 700;
-      margin-bottom: 20px;
-    }
+        .countdown-text {
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--text-color);
+            text-align: right;
+        }
 
-    .btn-get-started {
-      background: var(--primary-color);
-      color: #fff;
-      padding: 10px 30px;
-      border-radius: 4px;
-      text-decoration: none;
-      transition: 0.3s;
-    }
+        .note-area {
+            width: 100%;
+            background: transparent;
+            border: var(--border-style);
+            border-radius: 4px;
+            color: #bbb;
+            padding: 12px;
+            font-size: 0.95rem;
+            resize: none;
+            box-sizing: border-box;
+            line-height: 1.4;
+            height: 100px;
+        }
 
-    .btn-get-started:hover {
-      background: #3d8d94;
-      color: #fff;
-    }
+        /* --- RIGHT SIDE CLOCK --- */
+        .sidebar {
+            flex: 0.5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-    /* Services & Cards */
-    .section-title {
-      text-align: center;
-      padding: 60px 0 30px 0;
-    }
+        .clock-container {
+            width: 350px;
+            height: 350px;
+            background-color: rgba(26, 28, 39, 0.4);
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-    .service-item {
-      padding: 40px;
-      box-shadow: 0px 0 25px 0 rgba(0, 0, 0, 0.1);
-      transition: 0.3s;
-      border-radius: 8px;
-      height: 100%;
-      background: #fff;
-    }
+        .clock {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+        }
 
-    .service-item:hover {
-      transform: translateY(-10px);
-    }
+        .clock::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #fff;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
 
-    .service-item i {
-      font-size: 36px;
-      color: var(--primary-color);
-      margin-bottom: 20px;
-      display: inline-block;
-    }
+        .hand {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: bottom;
+            border-radius: 4px;
+        }
 
-    footer {
-      background: #111;
-      color: #fff;
-      padding: 50px 0;
-      text-align: center;
-      margin-top: 80px;
-    }
-  </style>
+        .hour { width: 3px; height: 100px; background: #fff; z-index: 3; }
+        .min { width: 2px; height: 140px; background: #bbb; z-index: 2; }
+        .sec { width: 0.5px; height: 145px; background: var(--accent-color); z-index: 1; }
+
+    </style>
 </head>
-
 <body>
 
-  <header id="header" class="fixed-top d-flex align-items-center">
-    <div class="container d-flex align-items-center justify-content-between">
-      <h1 class="logo"><a href="#" class="text-decoration-none" style="color: var(--primary-color);">Craftivo<span>.</span></a></h1>
-      <nav class="navbar">
-        <ul class="nav">
-          <li><a class="nav-link active" href="#hero">Home</a></li>
-          <li><a class="nav-link px-3" href="#about">About</a></li>
-          <li><a class="nav-link px-3" href="#services">Services</a></li>
-          <li><a class="nav-link px-3" href="#portfolio">Portfolio</a></li>
-          <li><a class="nav-link px-3" href="#contact">Contact</a></li>
-        </ul>
-      </nav>
+<div class="main-wrapper">
+    
+    <div class="content-area">
+        <div id="current-date">Loading...</div>
+
+        <div class="deadline-list">
+            
+            <div class="deadline-card" data-time="2026-05-15T09:00:00">
+                <div class="card-row-1">
+                    <div class="timer-name">Write Chapter 1-3</div>
+                    <div class="target-date">May 15, 2026</div>
+                    <div class="countdown-text">-- days</div>
+                </div>
+                <textarea class="note-area" rows="4" placeholder="Started on March 8, 2026. Writing speed: 4-8 pages per day. Total page is 360. 350 words per page. "></textarea>
+            </div>
+
+            <div class="deadline-card" data-time="2026-05-16T18:00:00">
+                <div class="card-row-1">
+                    <div class="timer-name">Write Chapter 4-5</div>
+                    <div class="target-date">May 16, 2026</div>
+                    <div class="countdown-text">-- days</div>
+                </div>
+                <textarea class="note-area" rows="4" placeholder="Description here..."></textarea>
+            </div>
+
+            <div class="deadline-card" data-time="2026-12-31T23:59:59">
+                <div class="card-row-1">
+                    <div class="timer-name">Grammer Check</div>
+                    <div class="target-date">Dec 31, 2026</div>
+                    <div class="countdown-text">-- days</div>
+                </div>
+                <textarea class="note-area" rows="4" placeholder="Description here..."></textarea>
+            </div>
+
+            <div class="deadline-card" data-time="2027-01-15T12:00:00">
+                <div class="card-row-1">
+                    <div class="timer-name">TASK 4</div>
+                    <div class="target-date">Jan 15, 2027</div>
+                    <div class="countdown-text">-- days</div>
+                </div>
+                <textarea class="note-area" rows="4" placeholder="Description here..."></textarea>
+            </div>
+
+            <div class="deadline-card" data-time="2027-02-01T00:00:00">
+                <div class="card-row-1">
+                    <div class="timer-name">TASK 5</div>
+                    <div class="target-date">Feb 01, 2027</div>
+                    <div class="countdown-text">-- days</div>
+                </div>
+                <textarea class="note-area" rows="4" placeholder="Description here..."></textarea>
+            </div>
+
+            <div class="deadline-card" data-time="2027-01-15T12:00:00">
+                <div class="card-row-1">
+                    <div class="timer-name">TASK 6</div>
+                    <div class="target-date">Jan 15, 2027</div>
+                    <div class="countdown-text">-- days</div>
+                </div>
+                <textarea class="note-area" rows="4" placeholder="Description here..."></textarea>
+            </div>
+
+            <div class="deadline-card" data-time="2027-01-15T12:00:00">
+                <div class="card-row-1">
+                    <div class="timer-name">TASK 7</div>
+                    <div class="target-date">Jan 15, 2027</div>
+                    <div class="countdown-text">-- days</div>
+                </div>
+                <textarea class="note-area" rows="4" placeholder="Description here..."></textarea>
+            </div>
+
+            <div class="deadline-card" data-time="2027-01-15T12:00:00">
+                <div class="card-row-1">
+                    <div class="timer-name">ДААЛГАВАР 8</div>
+                    <div class="target-date">Jan 15, 2027</div>
+                    <div class="countdown-text">-- days</div>
+                </div>
+                <textarea class="note-area" rows="4" placeholder="Description here..."></textarea>
+            </div>
+
+
+
+
+        </div>
     </div>
-  </header>
 
-  <section id="hero">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-6 d-flex flex-column justify-content-center">
-          <h1>Modern Solutions for Your Business</h1>
-          <p class="fs-5 mb-4">We are a team of talented designers making websites with Bootstrap.</p>
-          <div>
-            <a href="#about" class="btn-get-started">Get Started</a>
-          </div>
+    <div class="sidebar">
+        <div class="clock-container">
+            <div class="clock">
+                <div class="hand hour" id="hour-hand"></div>
+                <div class="hand min" id="min-hand"></div>
+                <div class="hand sec" id="sec-hand"></div>
+            </div>
         </div>
-      </div>
     </div>
-  </section>
 
-  <main id="main">
-    <section id="services" class="container">
-      <div class="section-title">
-        <h2>Services</h2>
-        <p>Check our wide range of professional services</p>
-      </div>
+</div>
 
-      <div class="row g-4">
-        <div class="col-md-4">
-          <div class="service-item">
-            <i class="bi bi-briefcase"></i>
-            <h3>Web Design</h3>
-            <p>Creating beautiful and functional websites tailored to your brand identity.</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="service-item">
-            <i class="bi bi-card-checklist"></i>
-            <h3>Development</h3>
-            <p>Building robust and scalable web applications using the latest technologies.</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="service-item">
-            <i class="bi bi-bar-chart"></i>
-            <h3>Marketing</h3>
-            <p>Strategic digital marketing to grow your online presence and reach more customers.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
+<script>
+    function updateDate() {
+        const now = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+        document.getElementById('current-date').innerText = now.toLocaleDateString('en-US', options);
+    }
 
-  <footer>
-    <div class="container">
-      <h3>Craftivo</h3>
-      <p>Et aut eum quis fuga eos sunt ipsa nihil. Labore corporis magni eligendi fuga maxime saepe commodi placeat.</p>
-      <div class="social-links mt-3">
-        <a href="#" class="btn btn-outline-light btn-sm mx-1"><i class="bi bi-twitter"></i></a>
-        <a href="#" class="btn btn-outline-light btn-sm mx-1"><i class="bi bi-facebook"></i></a>
-        <a href="#" class="btn btn-outline-light btn-sm mx-1"><i class="bi bi-instagram"></i></a>
-      </div>
-      <div class="copyright mt-4">
-        &copy; Copyright <strong><span>Craftivo</span></strong>. All Rights Reserved
-      </div>
-    </div>
-  </footer>
+    function updateAnalogClock() {
+        const now = new Date();
+        const s = now.getSeconds() * 6;
+        const m = now.getMinutes() * 6;
+        const h = (now.getHours() % 12) * 30 + (now.getMinutes() / 2);
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  
-  <script>
-    // Header scroll эффект
-    window.addEventListener('scroll', () => {
-      const header = document.querySelector('#header');
-      if (window.scrollY > 100) {
-        header.style.padding = "10px 0";
-      } else {
-        header.style.padding = "20px 0";
-      }
-    });
-  </script>
+        document.getElementById('sec-hand').style.transform = `translateX(-50%) rotate(${s}deg)`;
+        document.getElementById('min-hand').style.transform = `translateX(-50%) rotate(${m}deg)`;
+        document.getElementById('hour-hand').style.transform = `translateX(-50%) rotate(${h}deg)`;
+    }
+
+    function updateCountdowns() {
+        const cards = document.querySelectorAll('.deadline-card');
+        cards.forEach(card => {
+            const targetTime = new Date(card.getAttribute('data-time')).getTime();
+            const now = new Date().getTime();
+            const diff = targetTime - now;
+            const display = card.querySelector('.countdown-text');
+
+            if (diff <= 0) {
+                display.innerText = "Expired";
+                display.style.color = "#ff4d4d";
+                return;
+            }
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            display.innerText = `${d + 1} days`; 
+            display.style.color = "#f0f0f0";
+        });
+    }
+
+    setInterval(() => {
+        updateAnalogClock();
+        updateCountdowns();
+    }, 1000);
+
+    updateDate();
+    updateAnalogClock();
+    updateCountdowns();
+</script>
 
 </body>
 </html>
