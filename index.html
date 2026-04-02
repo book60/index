@@ -3,204 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Book</title>
+    <title>Ном Маркетинг | Dynamic Content</title>
     <style>
-        /* Үндсэн тохиргоо */
-        :root {
-            --primary: #1a1a1a; /* Классик хар */
-            --accent: #d4a373;  /* Номын хуудас шиг зөөлөн шаргал */
-            --bg: #fafafa;
-            --white: #ffffff;
-            --text: #2d3436;
-        }
-
-        * { box-sizing: border-box; }
-
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            line-height: 1.6;
-        }
-
-        /* 1-р давхарга: Нүүр хуудас (Header) */
-        header {
-            background-color: var(--primary);
-            color: var(--white);
-            padding: 3rem 1rem;
-            text-align: center;
-        }
-
-        header h1 { 
-            margin: 0; 
-            font-size: 2rem; 
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
-
-        /* 2-р давхарга: Үндсэн цэс (Grid) */
-        .main-nav {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr); /* Компьютер дээр 4 багана */
-            gap: 1px;
-            background-color: #ddd;
-            max-width: 1200px;
-            margin: 0 auto;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-
-        .nav-btn {
-            background-color: var(--white);
-            border: none;
-            padding: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-            font-size: 1rem;
-        }
-
-        .nav-btn:hover { background-color: #f0f0f0; }
-        .nav-btn.active { 
-            background-color: var(--accent); 
-            color: var(--white); 
-        }
-
-        /* 3-р давхарга: Дэд цэс (Sub-navigation) */
-        .sub-nav-container {
-            background-color: #eee;
-            overflow: hidden;
-            max-height: 0;
-            transition: max-height 0.3s ease-out;
-        }
-
-        .sub-nav-container.active { max-height: 200px; padding: 10px 0; }
-
-        .sub-nav-inner {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .sub-btn {
-            background: var(--white);
-            border: 1px solid #ccc;
-            padding: 6px 15px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.85rem;
-        }
-
-        .sub-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
-
-        /* Агуулга харуулах хэсэг */
-        .content-wrapper {
-            max-width: 900px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background: var(--white);
-            min-height: 400px;
-            border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-        }
-
-        .page-content { display: none; animation: fadeIn 0.4s ease; }
-        .page-content.active { display: block; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* RESPONSIVE - ГАР УТАС, ТАБЛЕТ */
-        @media (max-width: 850px) {
-            .main-nav { grid-template-columns: repeat(2, 1fr); } /* Таблет дээр 2х2 */
-        }
-
-        @media (max-width: 480px) {
-            header { padding: 1.5rem 1rem; }
-            header h1 { font-size: 1.4rem; }
-            .main-nav { grid-template-columns: 1fr; } /* Гар утсан дээр 1 багана */
-            .nav-btn { padding: 0.8rem; border-bottom: 1px solid #eee; }
-            .content-wrapper { margin: 1rem; padding: 1.5rem; }
-        }
-
-        footer {
-            text-align: center;
-            padding: 2rem;
-            font-size: 0.8rem;
-            color: #888;
-        }
+        :root { --primary: #1a1a1a; --accent: #d4a373; --bg: #fafafa; }
+        body { font-family: sans-serif; background: var(--bg); margin: 0; }
+        header { background: var(--primary); color: white; padding: 2rem; text-align: center; }
+        .main-nav { display: grid; grid-template-columns: repeat(4, 1fr); background: #eee; }
+        .nav-btn { padding: 15px; border: none; cursor: pointer; font-weight: bold; }
+        .nav-btn.active { background: var(--accent); color: white; }
+        .sub-nav { display: none; background: #ddd; padding: 10px; text-align: center; gap: 10px; }
+        .sub-nav.show { display: flex; justify-content: center; flex-wrap: wrap; }
+        .sub-btn { background: white; border: 1px solid #ccc; padding: 5px 15px; border-radius: 15px; cursor: pointer; }
+        .content { max-width: 800px; margin: 2rem auto; background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); min-height: 300px; }
+        @media (max-width: 600px) { .main-nav { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1 id="brand-title">НОМЫН НЭР</h1>
-    </header>
+<header><h1>МИНИЙ НОМ</h1></header>
 
-    <nav class="main-nav">
-        <button class="nav-btn" onclick="toggleMain('page1', this)">ХУУДАС-1</button>
-        <button class="nav-btn" onclick="toggleMain('page2', this)">ХУУДАС-2</button>
-        <button class="nav-btn" onclick="toggleMain('page3', this)">ХУУДАС-3</button>
-        <button class="nav-btn" onclick="toggleMain('page4', this)">ХУУДАС-4</button>
-    </nav>
+<nav class="main-nav" id="mainNav"></nav>
+<div class="sub-nav" id="subNav"></div>
 
-    <div id="sub-page1" class="sub-nav-container">
-        <div class="sub-nav-inner">
-            <button class="sub-btn" onclick="updateContent('Дэд хуудас 1а', 'Энд номын танилцуулга хэсэг байна.')">ДЭД ХУУДАС-1а</button>
-            <button class="sub-btn" onclick="updateContent('Дэд хуудас 1б', 'Энд зохиолчийн тухай мэдээлэл байна.')">ДЭД ХУУДАС-1б</button>
-            <button class="sub-btn" onclick="updateContent('Дэд хуудас 1в', 'Энд уншигчдын сэтгэгдэл байна.')">ДЭД ХУУДАС-1в</button>
-            <button class="sub-btn" onclick="updateContent('Дэд хуудас 1г', 'Энд худалдан авах холбоос байна.')">ДЭД ХУУДАС-1г</button>
-        </div>
-    </div>
+<main class="content" id="appContent">
+    <h2>Тавтай морил</h2>
+    <p>Мэдээлэл үзэхийн тулд цэснээс сонгоно уу.</p>
+</main>
 
-    <main class="content-wrapper" id="display-area">
-        <div class="page-content active">
-            <h2>Тавтай морилно уу</h2>
-            <p>Дээрх цэснээс сонголт хийж номын мэдээллийг үзнэ үү. Энэхүү сайт нь бүх төрлийн төхөөрөмж дээр зохицож харагдахаар бүтээгдсэн.</p>
-        </div>
-    </main>
-
-    <footer>
-        &copy; 2026 Book Marketing. Бүх эрх хуулиар хамгаалагдсан.
-    </footer>
-
-    <script>
-        function toggleMain(pageId, btn) {
-            // Идэвхтэй товчлуурын өнгийг солих
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-
-            // Дэд цэсүүдийг хаах/нээх
-            document.querySelectorAll('.sub-nav-container').forEach(sn => sn.classList.remove('active'));
-            
-            if(pageId === 'page1') {
-                document.getElementById('sub-page1').classList.add('active');
-                updateContent('Хуудас-1', 'Дэд цэсийг ашиглан дэлгэрэнгүй мэдээлэл авна уу.');
-            } else {
-                updateContent(btn.innerText, 'Энэ бол ' + btn.innerText + '-ийн динамик агуулга юм.');
+<script>
+    // 1. МЭДЭЭЛЛИЙН САН (ЭНДЭЭС ТЕКСТЭЭ ЗАСАХ БОЛОМЖТОЙ)
+    const bookData = {
+        "page1": {
+            "label": "ХУУДАС-1",
+            "title": "Үндсэн танилцуулга",
+            "subPages": {
+                "1а": { "title": "Дэд хуудас 1а", "text": "Энэ бол 1а-ийн мэдээлэл." },
+                "1б": { "title": "Дэд хуудас 1б", "text": "Энэ бол 1б-ийн мэдээлэл." },
+                "1в": { "title": "Дэд хуудас 1в", "text": "Энэ бол 1в-ийн мэдээлэл." },
+                "1г": { "title": "Дэд хуудас 1г", "text": "Энэ бол 1г-ийн мэдээлэл." }
             }
+        },
+        "page2": { "label": "ХУУДАС-2", "title": "Зохиолчийн тухай", "text": "Зохиолчийн намтар энд байна." },
+        "page3": { "label": "ХУУДАС-3", "title": "Үнэ ба Хямдрал", "text": "Одоогийн үнэ: 25,000 төгрөг." },
+        "page4": { "label": "ХУУДАС-4", "title": "Холбоо барих", "text": "Утас: 9911-XXXX" }
+    };
+
+    // 2. ЦЭСҮҮДИЙГ АВТОМАТААР ҮҮСГЭХ
+    const mainNav = document.getElementById('mainNav');
+    const subNav = document.getElementById('subNav');
+    const appContent = document.getElementById('appContent');
+
+    Object.keys(bookData).forEach(key => {
+        const btn = document.createElement('button');
+        btn.className = 'nav-btn';
+        btn.innerText = bookData[key].label;
+        btn.onclick = () => loadMainPage(key, btn);
+        mainNav.appendChild(btn);
+    });
+
+    function loadMainPage(key, btn) {
+        // Идэвхтэй товчийг тэмдэглэх
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const data = bookData[key];
+        
+        // Дэд цэс байгаа эсэхийг шалгах
+        subNav.innerHTML = '';
+        if (data.subPages) {
+            subNav.classList.add('show');
+            Object.keys(data.subPages).forEach(subKey => {
+                const sBtn = document.createElement('button');
+                sBtn.className = 'sub-btn';
+                sBtn.innerText = subKey;
+                sBtn.onclick = () => {
+                    renderContent(data.subPages[subKey].title, data.subPages[subKey].text);
+                };
+                subNav.appendChild(sBtn);
+            });
+        } else {
+            subNav.classList.remove('show');
         }
 
-        function updateContent(title, text) {
-            const display = document.getElementById('display-area');
-            display.innerHTML = `
-                <div class="page-content active">
-                    <h2>${title}</h2>
-                    <p>${text}</p>
-                    <div style="margin-top:20px; width:100%; height:250px; background:#f9f9f9; border:1px solid #eee; display:flex; align-items:center; justify-content:center; border-radius:5px;">
-                        <span style="color:#ccc">Зураг эсвэл контент (Image Placeholder)</span>
-                    </div>
-                </div>
-            `;
-        }
-    </script>
+        renderContent(data.title, data.text || "Дэд цэснээс сонголт хийнэ үү.");
+    }
+
+    function renderContent(title, text) {
+        appContent.innerHTML = `<h2>${title}</h2><p>${text}</p>`;
+    }
+</script>
+
 </body>
 </html>
