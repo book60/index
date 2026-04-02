@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Podcast Player</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --bg: #091534;
+            --card: #D4E4F7;
+            --text: #236AB9;
+            --text-light: #64748b;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: var(--card);
+            padding: 2rem;
+            border-radius: 24px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Player UI */
+        .podcast-header { text-align: center; margin-bottom: 1.5rem; }
+        .cover-art {
+            width: 180px; height: 180px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            margin: 0 auto 1rem;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 3rem;
+        }
+
+        audio { width: 100%; margin-top: 1rem; border-radius: 8px; }
+
+        /* Timestamps */
+        .timestamps { margin-top: 1.5rem; border-top: 1px solid #e2e8f0; padding-top: 1rem; }
+        .timestamp-item {
+            display: flex; justify-content: space-between;
+            padding: 10px; border-radius: 8px;
+            cursor: pointer; transition: 0.2s;
+        }
+        .timestamp-item:hover { background: #f1f5f9; color: var(--primary); }
+        .time-code { font-weight: bold; color: var(--primary); }
+
+        /* Social Share */
+        .share-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 10px; margin-top: 2rem;
+        }
+        .share-btn {
+            padding: 8px; border: 1px solid #e2e8f0; border-radius: 12px;
+            text-decoration: none; font-size: 0.8rem; text-align: center;
+            color: var(--text-light); transition: 0.3s;
+        }
+        .share-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* Custom Audio Control (Simplified for low data) */
+        .custom-player { background: #f1f5f9; padding: 15px; border-radius: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="podcast-header">
+        <img src="https://www.coverartmarket.com/cde/images/1738160155-lost-girl.jpg" alt="Podcast Cover" class="cover-art">
+        <h2 id="title">Дугаарын гарчиг #01</h2>
+        <p style="color: var(--text-light)">Ухаалаг систем ба Ирээдүй</p>
+    </div>
+
+    <div class="custom-player">
+        <audio id="audioPlayer" controls>
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+            Таны хөтөч аудио тоглуулагчийг дэмжихгүй байна.
+        </audio>
+    </div>
+
+    <div class="timestamps">
+        <h4 style="margin-bottom: 10px;">Хөтөлбөр:</h4>
+        <div class="timestamp-item" onclick="seekAudio(0)">
+            <span>Эхлэл ба мэндчилгээ</span>
+            <span class="time-code">00:00</span>
+        </div>
+        <div class="timestamp-item" onclick="seekAudio(45)">
+            <span>Гол сэдэв: AI хэрэглээ</span>
+            <span class="time-code">00:45</span>
+        </div>
+        <div class="timestamp-item" onclick="seekAudio(120)">
+            <span>Зочны зөвлөгөө</span>
+            <span class="time-code">03:19</span>
+        </div>
+    </div>
+
+    <div class="share-grid">
+        <a href="#" class="share-btn" onclick="shareFB()">Facebook</a>
+        <a href="#" class="share-btn" onclick="shareTwitter()">Twitter</a>
+        <a href="sms:?body=Энэ подкастыг сонсоорой: " class="share-btn">SMS</a>
+        <a href="mailto:?subject=Подкаст санал болгох&body=Үүнийг үзээрэй: " class="share-btn">Email</a>
+        <a href="#" class="share-btn" onclick="copyLink()">Линк хуулах</a>
+    </div>
+</div>
+
+<script>
+    const player = document.getElementById('audioPlayer');
+    const pageUrl = window.location.href;
+    const shareText = "Энэхүү сонирхолтой подкастыг сонсоорой!";
+
+    // Таймстамп руу үсрэх функц
+    function seekAudio(seconds) {
+        player.currentTime = seconds;
+        player.play();
+    }
+
+    // Сошиал шейр функцүүд
+    function shareFB() {
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pageUrl)}`, '_blank');
+    }
+
+    function shareTwitter() {
+        window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(pageUrl)}&text=${encodeURIComponent(shareText)}`, '_blank');
+    }
+
+    function copyLink() {
+        navigator.clipboard.writeText(pageUrl).then(() => {
+            alert("Линк хуулагдлаа!");
+        });
+    }
+</script>
+
+</body>
+</html>
