@@ -97,6 +97,7 @@
             padding: 12px;
             font-size: 0.95rem;
             resize: none; /* Хэрэглэгч өөрөө булагнаас нь татаж сунгахыг идэвхгүй болгох */
+            overflow: hidden; /* Скролл баарыг нуух */
             overflow-y: hidden; /* Скролл баар харагдахгүй */
             box-sizing: border-box;
             line-height: 1.4;
@@ -125,10 +126,9 @@
         }
 
         .second-hand {
-            /* Зүүний хөдөлгөөнийг зөөлөн, жигд болгоно */
-            transition: transform 0.05s cubic-bezier(0.4, 2.3, 0.3, 1);
-            /* Эсвэл бүр зөөлөн урсгахыг хүсвэл доорхыг ашиглана: */
-            transition-timing-function: linear;
+            transition: none !important; /* JS-ээр урсгаж байгаа үед transition хэрэггүй */
+            width: 2px;
+            background: red;
         }
 
         .clock {
@@ -262,93 +262,77 @@
 
 </div>
 
+
+
+
+    
 <script>
-    function updateDate() {
-        const now = new Date();
-        const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
-        document.getElementById('current-date').innerText = now.toLocaleDateString('en-US', options);
-    }
+// 1. Текст блокийн өндрийг автоматаар тааруулах
+function autoResize(textarea) {
+    if (!textarea) return;
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+}
 
+// 2. Аналог цагийг "урсгаж" ажиллуулах (Smooth Sweep)
+function updateAnalogClock() {
+    const now = new Date();
+    const seconds = now.getSeconds();
+    const millis = now.getMilliseconds();
+    const minutes = now.getMinutes();
+    const hours = now.getHours();
 
+    // Секундийн зүүг миллисекундтэй тооцож урсгах
+    const secondDegrees = ((seconds + millis / 1000) / 60) * 360 + 90;
+    const minuteDegrees = ((minutes + seconds / 60) / 60) * 360 + 90;
+    const hourDegrees = ((hours % 12 + minutes / 60) / 12) * 360 + 90;
 
-    
-    function updateAnalogClock() {
-        const now = new Date();
-    
-        // Секунд, Миллисекундыг хамт тооцож "урсгах"
-        const seconds = now.getSeconds();
-        const milliseconds = now.getMilliseconds();
-    
-        // Нийт секундийг бутархайгаар тооцох (Жишээ нь: 15.500 секунд)
-        const secondDegrees = ((seconds + milliseconds / 1000) / 60) * 360 + 90;
-        const minsDegrees = ((now.getMinutes() + seconds / 60) / 60) * 360 + 90;
-        const hourDegrees = ((now.getHours() + now.getMinutes() / 60) / 12) * 360 + 90;
+    const secondHand = document.querySelector('.second-hand');
+    const minHand = document.querySelector('.min-hand');
+    const hourHand = document.querySelector('.hour-hand');
 
-        // Зүүнүүдийг эргүүлэх (Таны код дээрх класс нэршилтэй таарч байх ёстой)
-        document.querySelector('.second-hand').style.transform = `rotate(${secondDegrees}deg)`;
-        document.querySelector('.min-hand').style.transform = `rotate(${minsDegrees}deg)`;
-        document.querySelector('.hour-hand').style.transform = `rotate(${hourDegrees}deg)`;
-    }
+    if (secondHand) secondHand.style.transform = `rotate(${secondDegrees}deg)`;
+    if (minHand) minHand.style.transform = `rotate(${minuteDegrees}deg)`;
+    if (hourHand) hourHand.style.transform = `rotate(${hourDegrees}deg)`;
+}
 
-        // 1000ms биш, харин 50ms тутамд шинэчилбэл зүү "урсдаг" болно
-        setInterval(updateClock, 50);
+// 3. Хоног тоолуурыг шинэчлэх (Countdown)
+function updateCountdowns() {
+    const cards = document.querySelectorAll('.deadline-card');
+    const now = new Date().getTime();
 
+    cards.forEach(card => {
+        const targetStr = card.getAttribute('data-time');
+        const display = card.querySelector('.countdown-text');
+        
+        if (targetStr && display) {
+            const targetDate = new Date(targetStr).getTime();
+            const distance = targetDate - now;
 
-
-    
-
-    function updateCountdowns() {
-        const cards = document.querySelectorAll('.deadline-card');
-        cards.forEach(card => {
-            const targetTime = new Date(card.getAttribute('data-time')).getTime();
-            const now = new Date().getTime();
-            const diff = targetTime - now;
-            const display = card.querySelector('.countdown-text');
-
-            if (diff <= 0) {
-                display.innerText = "Expired";
-                display.style.color = "#ff4d4d";
-                return;
+            if (distance < 0) {
+                display.innerHTML = "<b style='color:red;'>Deadline Passed</b>";
+            } else {
+                const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                display.innerHTML = `<b>${d}</b>d <b>${h}</b>h <b>${m}</b>m <b>${s}</b>s`;
             }
+        }
+    });
+}
 
-            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-            display.innerText = `${d + 1} days`; 
-            display.style.color = "#f0f0f0";
-        });
-    }
+// Бүх зүйлийг ажиллуулж эхлэх
+document.addEventListener('DOMContentLoaded', () => {
+    // Текст блокуудыг анхлан сунгах
+    document.querySelectorAll('.note-area').forEach(autoResize);
 
+    // Секунд тутамд (эсвэл 50ms тутамд) шинэчлэх
     setInterval(() => {
         updateAnalogClock();
         updateCountdowns();
-    }, 1000);
-
-    updateDate();
-    updateAnalogClock();
-    updateCountdowns();
-</script>
-
-    
-
-<script>
-// Текст блокийн өндрийг тааруулах функц
-function autoResize(el) {
-    el.style.height = 'auto';
-    el.style.height = el.scrollHeight + 'px';
-}
-
-// Хуудас ачаалагдахад бүх textarea-г шалгаж, өндрийг нь тааруулах
-document.addEventListener('DOMContentLoaded', () => {
-    const textareas = document.querySelectorAll('.note-area');
-
-    textareas.forEach(textarea => {
-        // 1. Анх ачаалагдах үед дотор нь текст байвал сунгана
-        autoResize(textarea);
-
-        // 2. Хэрэглэгч бичих болгонд сунгана
-        textarea.addEventListener('input', function() {
-            autoResize(this);
-        });
-    });
+    }, 50); // 50ms нь секундийн зүүг маш зөөлөн урсгана
 });
 </script>
 
