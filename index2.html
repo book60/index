@@ -166,8 +166,9 @@
 
         /* 5. СТИЛЬ: PRODUCT SECTION (Бүтээгдэхүүн) */
         .featured-products {
-            padding: 10px 50px;
-            background-color: var(--off-white);
+            padding: 30px 50px;
+            background-color: transparent;
+			background: none;
             text-align: center;
         }
 
@@ -175,19 +176,21 @@
             font-family: 'Playfair Display', serif;
             font-size: 42px;
             margin-bottom: 50px;
+			color: var(--white);
         }
 
         .product-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 10px;
+            gap: 50px;
         }
 
         .product-card {
-            background: white;
-            padding: 20px;
+            background: rgba(255, 255, 255, 0.2); /* 20% тунгалаг цагаан фон (илүү их нэвт харагдана) */
+			padding: 20px;
             border-radius: 4px;
             transition: 0.3s;
+			color: var(--white);
         }
 
         .product-card img {
@@ -207,7 +210,7 @@
 <body>
 
     <div class="promo-bar">
-        Ends Soon — Free Welcome Kit on orders $45+
+        Сайтын дизайныг удахгүй дуусна.
     </div>
 
     <header id="mainHeader">
