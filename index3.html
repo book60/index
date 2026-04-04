@@ -18,12 +18,12 @@
             left: 90%;
             transform: translate(-50%, -50%);
             z-index: 1000;
-            color: grey;
+            color: #555;
             pointer-events: none;
             text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
         }
         .clock-row { display: flex; align-items: baseline; margin-bottom: 5px; }
-        .clock-label { font-size: 20px; color: #888; width: 150px; text-align: right; margin-right: 20px; }
+        .clock-label { font-size: 20px; color: #555; width: 150px; text-align: right; margin-right: 20px; }
         .clock-value { font-size: 36px; font-weight: regular; letter-spacing: 1px; }
 
         /* Time Zone Label Styling */
@@ -198,9 +198,9 @@ cities.forEach(city => {
         radius: 2,              // Цэгийн хэмжээ
         fillColor: "#00d4ff",   // Дотор талын өнгө (тод цэнхэр)
         color: "#fff",          // Хүрээний өнгө
-        weight: 0.1,            // Хүрээний зузаан
-        opacity: 1,
-        fillOpacity: 0.8
+        weight: 0,            // Хүрээний зузаан
+        opacity: 0,
+        fillOpacity: 1
     })
     .bindTooltip(city.name, { direction: 'top', className: 'city-tooltip' }) // Хот дээр очиход нэр нь харагдана
     .addTo(map);
@@ -268,9 +268,9 @@ europeanCapitals.forEach(city => {
         radius: 2,
         fillColor: "#00d4ff",
         color: "#fff",
-        weight: 0.5,
-        opacity: 1,
-        fillOpacity: 0.9
+        weight: 0,
+        opacity: 0,
+        fillOpacity: 1
     })
     .bindTooltip(city.name, { 
         direction: 'top', 
@@ -387,9 +387,9 @@ asianCapitals.forEach(city => {
         radius: 2,
         fillColor: "#ffcc00", // Азийн хотуудыг шар өнгөөр ялгав
         color: "#fff",
-        weight: 0.5,
-        opacity: 1,
-        fillOpacity: 0.9
+        weight: 0,
+        opacity: 0,
+        fillOpacity: 1
     })
     .bindTooltip(city.name, { 
         direction: 'top', 
@@ -438,9 +438,9 @@ northAmericanCapitals.forEach(city => {
         radius: 2,
         fillColor: "#00ff00", // Хойд Америкийн хотуудыг улаан өнгөөр ялгав
         color: "#fff",
-        weight: 0.5,
-        opacity: 1,
-        fillOpacity: 0.9
+        weight: 0,
+        opacity: 0,
+        fillOpacity: 1
     })
     .bindTooltip(city.name, { 
         direction: 'top', 
@@ -479,9 +479,9 @@ southAmericanCapitals.forEach(city => {
         radius: 2,
         fillColor: "#00ff00", // Өмнөд Америкийн хотуудыг ногоон өнгөөр ялгав
         color: "#fff",
-        weight: 0.5,
-        opacity: 1,
-        fillOpacity: 0.9
+        weight: 0,
+        opacity: 0,
+        fillOpacity: 1
     })
     .bindTooltip(city.name, { 
         direction: 'top', 
@@ -556,9 +556,9 @@ africanCapitals.forEach(city => {
         radius: 2,
         fillColor: "#ff3300", // Африкийн хотуудыг улбар шар өнгөөр ялгав
         color: "#fff",
-        weight: 0.5,
-        opacity: 1,
-        fillOpacity: 0.9
+        weight: 0,
+        opacity: 0,
+        fillOpacity: 1
     })
     .bindTooltip(city.name, { 
         direction: 'top', 
@@ -617,9 +617,9 @@ oceaniaCapitals.forEach(city => {
         radius: 2,
         fillColor: "#ff00ff", // Далайн орнуудыг ягаан өнгөөр ялгав
         color: "#fff",
-        weight: 0.5,
-        opacity: 1,
-        fillOpacity: 0.9
+        weight: 0,
+        opacity: 0,
+        fillOpacity: 1
     })
     .bindTooltip(city.name, { 
         direction: 'top', 
