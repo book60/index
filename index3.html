@@ -246,12 +246,12 @@ const f1Tracks2026 = [
 // Хотуудыг нэмэх функц (Таны кодын cities массив дотор нэмж болно)
 f1Tracks2026.forEach(city => {
     L.circleMarker([city.lat, city.lon], {
-        radius: 3,
-        fillColor: "#5400E6",   // Дотор талын өнгө (тод ягаан)
-        color: "#fff",          // Хүрээний өнгө
-        weight: 0,            // Хүрээний зузаан
-        opacity: 0,
-        fillOpacity: 1
+        radius: 5,
+        fillColor: "0",   // Дотор талын өнгө (тод ягаан)
+        color: "#ffcc00",          // Хүрээний өнгө
+        weight: 3,            // Хүрээний зузаан
+        opacity: 1,
+        fillOpacity: 0
     })
     .bindTooltip(city.name, { 
         direction: 'top', 
