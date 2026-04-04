@@ -143,50 +143,69 @@ f1Tracks2026.forEach(city => {
 
 
 const usaStrategicBases = [
-	{ name: "Ramstein Air Base, Germany", lat: 49.4447, lon: 7.5911 }, // Европ дахь хамгийн том бааз
-	{ name: "Camp Humphreys, South Korea", lat: 36.9675, lon: 127.0317 }, // Хилийн чанад дахь хамгийн том хуурай замын бааз
-	{ name: "Kadena Air Base, Japan", lat: 26.3556, lon: 127.7678 }, // Номхон далай дахь стратегийн зангилаа
-	{ name: "Guam (Andersen AFB)", lat: 13.5786, lon: 144.9247 }, // АНУ-ын өөрийн нутаг дэвсгэр дэх стратегийн бааз
-	{ name: "Diego Garcia, BIOT", lat: -7.3133, lon: 72.4111 }, // Энэтхэгийн далайн төв цэг
-	{ name: "Al Udeid Air Base, Qatar", lat: 25.1172, lon: 51.3150 }, // Ойрхи Дорнод дахь төв бааз
-	{ name: "Camp Lemonnier, Djibouti", lat: 11.5464, lon: 43.1458 }, // Африк дахь цорын ганц байнгын бааз
-	{ name: "Aviano Air Base, Italy", lat: 46.0319, lon: 12.5964 }, // НАТО-гийн өмнөд жигүүр
-	{ name: "Thule Air Base, Greenland", lat: 76.5312, lon: -68.7032 }, // Арктикийн хамгийн хойд цэг
-	{ name: "Incirlik Air Base, Turkey", lat: 37.0019, lon: 35.4258 }, // Ойрхи Дорнод болон Европын зааг дээрх бааз
-	{ name: "Fort Bragg (Liberty), NC, USA", lat: 35.1390, lon: -79.0060 }, // Хамгийн олон цэрэгтэй бааз
-	{ name: "Norfolk Naval Station, VA, USA", lat: 36.9377, lon: -76.3228 }, // Дэлхийн хамгийн том тэнгисийн цэргийн бааз
-	{ name: "Pentagon, VA, USA", lat: 38.8719, lon: -77.0563 }, // Цэргийн удирдлагын төв
-	{ name: "Nelllis Air Force Base, NV, USA", lat: 36.2361, lon: -115.0342 }, // Нисэх хүчний сургуулилалтын төв
-	{ name: "Joint Base Pearl Harbor-Hickam, HI", lat: 21.3445, lon: -157.9410 }, // Тэнгисийн болон агаарын хүчний нэгдсэн бааз
-	{ name: "Schofield Barracks, HI", lat: 21.4939, lon: -158.0647 },             // Хуурай замын цэргийн томоохон бааз
-	{ name: "Marine Corps Base Hawaii (Kaneohe Bay)", lat: 21.4447, lon: -157.7602 }, // Тэнгисийн явган цэргийн бааз
-	{ name: "Barking Sands Missile Range, Kauai", lat: 22.0225, lon: -159.7828 } // Пуужингийн туршилтын бааз
+    // --- INDOPACOM (Номхон далай, Ази) ---
+    { name: "Camp Humphreys, South Korea", lat: 36.9675, lon: 127.0317, cmd: "INDOPACOM" },
+    { name: "Kadena Air Base, Japan", lat: 26.3556, lon: 127.7678, cmd: "INDOPACOM" },
+    { name: "Guam (Andersen AFB)", lat: 13.5786, lon: 144.9247, cmd: "INDOPACOM" },
+    { name: "Diego Garcia, BIOT", lat: -7.3133, lon: 72.4111, cmd: "INDOPACOM" },
+    { name: "Joint Base Pearl Harbor-Hickam, HI", lat: 21.3445, lon: -157.9410, cmd: "INDOPACOM" },
+    { name: "Schofield Barracks, HI", lat: 21.4939, lon: -158.0647, cmd: "INDOPACOM" },
+    { name: "Marine Corps Base Hawaii", lat: 21.4447, lon: -157.7602, cmd: "INDOPACOM" },
+    { name: "Barking Sands Missile Range", lat: 22.0225, lon: -159.7828, cmd: "INDOPACOM" },
+
+    // --- EUCOM (Европ) ---
+    { name: "Ramstein Air Base, Germany", lat: 49.4447, lon: 7.5911, cmd: "EUCOM" },
+    { name: "Aviano Air Base, Italy", lat: 46.0319, lon: 12.5964, cmd: "EUCOM" },
+    { name: "Incirlik Air Base, Turkey", lat: 37.0019, lon: 35.4258, cmd: "EUCOM" },
+    
+    // --- CENTCOM (Ойрхи Дорнод, Төв Ази) ---
+    { name: "Al Udeid Air Base, Qatar", lat: 25.1172, lon: 51.3150, cmd: "CENTCOM" },
+    
+    // --- AFRICOM (Африк) ---
+    { name: "Camp Lemonnier, Djibouti", lat: 11.5464, lon: 43.1458, cmd: "AFRICOM" },
+
+    // --- NORTHCOM (Хойд Америк) ---
+    { name: "Thule Air Base, Greenland", lat: 76.5312, lon: -68.7032, cmd: "NORTHCOM" },
+    { name: "Fort Bragg (Liberty), NC, USA", lat: 35.1390, lon: -79.0060, cmd: "NORTHCOM" },
+    { name: "Norfolk Naval Station, VA, USA", lat: 36.9377, lon: -76.3228, cmd: "NORTHCOM" },
+    { name: "Pentagon, VA, USA", lat: 38.8719, lon: -77.0563, cmd: "NORTHCOM" },
+    { name: "Nelllis Air Force Base, NV, USA", lat: 36.2361, lon: -115.0342, cmd: "NORTHCOM" }
 ];
 
-// Хотуудыг нэмэх функц (Таны кодын cities массив дотор нэмж болно)
-usaStrategicBases.forEach(city => {
-	// 1. Төв цэгт байрлах жижиг тод цэг
-    L.circleMarker([city.lat, city.lon], {
-        radius: 10,           // Жижиг хэмжээ
-        fillColor: "#F641F0", // Төв цэгний өнгө
-        color: "#fff",       // Цэгний хүрээ
-        weight: 1,           // Хүрээний зузаан
-        fillOpacity: 0       // Огт тунгалаг биш, цул өнгө
+// Командлалуудад зориулсан өнгөний код
+const commandColors = {
+    "INDOPACOM": "#F641F0", // Таны дуртай ягаан
+    "EUCOM": "#00E6FF",     // Цайвар цэнхэр
+    "CENTCOM": "#FFD700",   // Шар/Алтлаг
+    "AFRICOM": "#32CD32",   // Ногоон
+    "NORTHCOM": "#FF4500"   // Улаан/Улбар шар
+};
+
+usaStrategicBases.forEach(base => {
+    const baseColor = commandColors[base.cmd] || "#ffffff";
+
+    // 1. Төв цэгт байрлах жижиг тод цэг (Одоо "fillOpacity: 1" болгож тодруулсан)
+    L.circleMarker([base.lat, base.lon], {
+        radius: 4,            // Харагдахуйц жижиг хэмжээ
+        fillColor: baseColor, // Командлалын өнгөөр будна
+        color: "#fff",        
+        weight: 1,           
+        fillOpacity: 1       
     }).addTo(map);
 
-    // 2. Гадна талын том бүдэг тойрог (Таны одоогийн код)
-    L.circleMarker([city.lat, city.lon], {
-		radius: 350,
-        fillColor: "white",   // Дотор талын өнгө (тод ягаан)
-        color: "#F641F0", // Хүрээний өнгө
-        weight: 0.4,      // Хүрээний зузаан
-        opacity: 0,
-        fillOpacity: 0.05
+    // 2. Гадна талын том бүдэг тойрог (Радарын хүрээ)
+    L.circleMarker([base.lat, base.lon], {
+        radius: 350,
+        fillColor: baseColor, 
+        color: baseColor, 
+        weight: 0.5,      
+        opacity: 0.2,     // Хүрээ нь бага зэрэг харагдана
+        fillOpacity: 0.05 // Маш бүдэг дотор тал
     })
-    .bindTooltip(city.name, { 
+    .bindTooltip(`<b>${base.name}</b><br>Command: ${base.cmd}`, { 
         direction: 'top', 
         className: 'city-label',
-        offset: [0, -5]
+        offset: [0, -10]
     })
     .addTo(map);
 });
