@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real-Time Time Zone & Solar Map</title>
+    <title>Real-Time Map</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
@@ -11,20 +11,26 @@
         body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow: hidden; }
         #map { height: 100vh; width: 100vw; background: #0b0e14; }
 
+
+
+
         /* Central HUD Styling */
-        #central-clock-container {
-            position: absolute;
-            top: 95%;
-            left: 90%;
-            transform: translate(-50%, -50%);
-            z-index: 1000;
-            color: #555;
-            pointer-events: none;
-            text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
-        }
-        .clock-row { display: flex; align-items: baseline; margin-bottom: 5px; }
-        .clock-label { font-size: 20px; color: #555; width: 150px; text-align: right; margin-right: 20px; }
-        .clock-value { font-size: 36px; font-weight: regular; letter-spacing: 1px; }
+		#central-clock-container {
+			position: fixed;       /* Дэлгэцийн цонхтой харьцангуй тогтмол байрлана */
+			bottom: 20px;          /* Доод талаас авах зай */
+			right: 20px;           /* Баруун талаас авах зай */
+			z-index: 1000;
+			color: #fff;
+			pointer-events: none;
+			text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
+			/* Төвлөрүүлэх шаардлагагүй болсон тул transform-ыг хасав */
+		}
+        .clock-row { display: flex; align-items: baseline; margin-bottom: 0px; }
+        .clock-label { font-size: 20px; color: #fff; width: 150px; text-align: right; margin-right: 10px; }
+        .clock-value { font-size: 20px; font-weight: regular; letter-spacing: 1px; }
+
+
+
 
         /* Time Zone Label Styling */
         .tz-label {
@@ -32,24 +38,28 @@
             color: white;
             padding: 4px 8px;
             border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.2);
             text-align: Center;
             font-size: 11px;
             line-height: 1.2;
-            border: 1px solid rgba(255,255,255,0.2);
             pointer-events: none;
             white-space: nowrap;
         }
-        .tz-time { font-weight: regular; color: #5F98D8; font-size: 13px; }
-        .tz-date { color: #ccc; }
+        .tz-time { font-weight: regular; color: #5F98D8; font-size: 11px; }
+        .tz-date { color: #fff; }
         .tz-zone { color: #eedc83; text-transform: uppercase; letter-spacing: 1px; }
 
-		
-		/* Баруун доод булангийн Leaflet логог арилгах код */
+
+
+
+		/* Баруун доод буланд байсан Leaflet логог арилгана */
 		.leaflet-control-attribution {
-    		display: none !important;
+			display: none !important;
 		}
 
-		
+
+
+
         /* Overlay for Day/Night */
         .solar-terminator {
             fill: rgba(0, 0, 0, 0.5);
@@ -58,6 +68,11 @@
         }
     </style>
 </head>
+
+
+
+
+
 <body>
 
 <div id="central-clock-container">
@@ -77,6 +92,10 @@
 
 <div id="map"></div>
 
+
+
+
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
@@ -84,12 +103,24 @@
     const map = L.map('map', {
         center: [20, 0],
         zoom: 4,
-        minZoom: 2,
-        maxZoom: 18,
+		minZoom: 2,           // Хамгийн бага жижигсгэх хэмжээ
+		maxZoom: 19,          // Хамгийн их томруулах хэмжээ
+		opacity: 1,         // Зургийн тунгалаг байдал (0-1 хооронд)
         zoomControl: false
     });
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
+
+
+	L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map); // шөнийн зураг максзүүм20, дата анализ зориулалттай
+	// L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png').addTo(map); // өдрийн зураг, цэнхэр далай
+	// L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png').addTo(map); // өдрийн зураг, саарал далай, мэдээллийн график зориулалттай
+	// L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}').addTo(map); // гол усны зураг максзүүм13
+	// L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}').addTo(map); //газрын рельеф максзүүм13
+	// L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png').addTo(map); // газар орны нэр
+	// L.tileLayer('https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/{z}/{y}/{x}').addTo(map); // АНУ автозамын сүлжээ
+	// маш олон леирсийн библиотек. Кодыг хуулж энд тавьж ашиглаж болно: https://leaflet-extras.github.io/leaflet-providers/preview/
+	// L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}').addTo(map); // сансрын зураг
+
 
     const labels = [];
     const zoneLines = [];
@@ -98,43 +129,40 @@
     function initGrid() {
 	// Тэмдэглэх хотуудын жагсаалт (Нэр, Өргөрөг, Уртраг)
 
-// ФОРМУЛА-1 2026 ОНЫ ХОТУУД
-// 2026 оны Формула-1-ийн уралдааны замуудын дата
+// ФОРМУЛА-1 2026 оны хотууд
 const f1Tracks2026 = [
-  { name: "Sakhir, Bahrain", lat: 26.0325, lon: 50.5106 },
-  { name: "Jeddah, Saudi Arabia", lat: 21.6319, lon: 39.1044 },
-  { name: "Melbourne, Australia", lat: -37.8497, lon: 144.9680 },
-  { name: "Suzuka, Japan", lat: 34.8431, lon: 136.5410 },
-  { name: "Shanghai, China", lat: 31.3389, lon: 121.2200 },
-  { name: "Miami, USA", lat: 25.9581, lon: -80.2389 },
-  { name: "Imola, Italy", lat: 44.3439, lon: 11.7167 },
-  { name: "Monaco, Monaco", lat: 43.7347, lon: 7.4206 },
-  { name: "Barcelona, Spain", lat: 41.5700, lon: 2.2611 },
-  { name: "Montreal, Canada", lat: 45.5000, lon: -73.5228 },
-  { name: "Spielberg, Austria", lat: 47.2197, lon: 14.7647 },
-  { name: "Silverstone, UK", lat: 52.0786, lon: -1.0169 },
-  { name: "Spa-Francorchamps, Belgium", lat: 50.4372, lon: 5.9714 },
-  { name: "Budapest, Hungary", lat: 47.5830, lon: 19.2505 },
-  { name: "Zandvoort, Netherlands", lat: 52.3888, lon: 4.5409 },
-  { name: "Monza, Italy", lat: 45.6156, lon: 9.2811 },
-  { name: "Baku, Azerbaijan", lat: 40.3725, lon: 49.8533 },
-  { name: "Singapore, Singapore", lat: 1.2914, lon: 103.8640 },
-  { name: "Austin, USA", lat: 30.1328, lon: -97.6411 },
-  { name: "Mexico City, Mexico", lat: 19.4042, lon: -99.0907 },
-  { name: "Sao Paulo, Brazil", lat: -23.7036, lon: -46.6997 },
-  { name: "Las Vegas, USA", lat: 36.1147, lon: -115.1728 },
-  { name: "Lusail, Qatar", lat: 25.4900, lon: 51.4542 },
-  { name: "Abu Dhabi, UAE", lat: 24.4672, lon: 54.6031 },
-  { name: "Madrid, Spain", lat: 40.4639, lon: -3.6156 }
-];
+  { "name": "Melbourne, Australia (2026-03-15)", "lat": -37.8497, "lon": 144.9680 },
+  { "name": "Shanghai, China (2026-03-22)", "lat": 31.3389, "lon": 121.2200 },
+  { "name": "Suzuka, Japan (2026-04-05)", "lat": 34.8431, "lon": 136.5410 },
+  { "name": "Sakhir, Bahrain (2026-04-19)", "lat": 26.0325, "lon": 50.5106 },
+  { "name": "Jeddah, Saudi Arabia (2026-04-26)", "lat": 21.6319, "lon": 39.1044 },
+  { "name": "Miami, USA (2026-05-10)", "lat": 25.9581, "lon": -80.2389 },
+  { "name": "Imola, Italy (2026-05-24)", "lat": 44.3439, "lon": 11.7167 },
+  { "name": "Monaco, Monaco (2026-05-31)", "lat": 43.7347, "lon": 7.4206 },
+  { "name": "Montreal, Canada (2026-06-14)", "lat": 45.5000, "lon": -73.5228 },
+  { "name": "Madrid, Spain (2026-06-21)", "lat": 40.4639, "lon": -3.6156 },
+  { "name": "Spielberg, Austria (2026-07-05)", "lat": 47.2197, "lon": 14.7647 },
+  { "name": "Silverstone, UK (2026-07-12)", "lat": 52.0786, "lon": -1.0169 },
+  { "name": "Spa-Francorchamps, Belgium (2026-07-26)", "lat": 50.4372, "lon": 5.9714 },
+  { "name": "Budapest, Hungary (2026-08-02)", "lat": 47.5830, "lon": 19.2505 },
+  { "name": "Zandvoort, Netherlands (2026-08-30)", "lat": 52.3888, "lon": 4.5409 },
+  { "name": "Monza, Italy (2026-09-06)", "lat": 45.6156, "lon": 9.2811 },
+  { "name": "Baku, Azerbaijan (2026-09-20)", "lat": 40.3725, "lon": 49.8533 },
+  { "name": "Singapore, Singapore (2026-10-04)", "lat": 1.2914, "lon": 103.8640 },
+  { "name": "Austin, USA (2026-10-25)", "lat": 30.1328, "lon": -97.6411 },
+  { "name": "Mexico City, Mexico (2026-11-01)", "lat": 19.4042, "lon": -99.0907 },
+  { "name": "Sao Paulo, Brazil (2026-11-08)", "lat": -23.7036, "lon": -46.6997 },
+  { "name": "Las Vegas, USA (2026-11-21)", "lat": 36.1147, "lon": -115.1728 },
+  { "name": "Lusail, Qatar (2026-11-29)", "lat": 25.4900, "lon": 51.4542 },
+  { "name": "Abu Dhabi, UAE (2026-12-06)", "lat": 24.4672, "lon": 54.6031 }
+]
 
-// Хотуудыг нэмэх функц (Таны кодын cities массив дотор нэмж болно)
 f1Tracks2026.forEach(city => {
     L.circleMarker([city.lat, city.lon], {
         radius: 10,
         fillColor: "0",   // Дотор талын өнгө (тод ягаан)
-        color: "#F641F0",     // Хүрээний өнгө
-        weight: 0.6,            // Хүрээний зузаан
+        color: "#F641F0", // Хүрээний өнгө
+        weight: 0.6,      // Хүрээний зузаан
         opacity: 1,
         fillOpacity: 0
     })
@@ -148,7 +176,7 @@ f1Tracks2026.forEach(city => {
 
 
 
-
+//АНУ цэргийн томоохон баазууд
 const usaStrategicBases = [
     // --- INDOPACOM (Номхон далай, Ази) ---
     { name: "Camp Humphreys, South Korea", lat: 36.9675, lon: 127.0317, cmd: "INDOPACOM" },
@@ -225,9 +253,9 @@ usaStrategicBases.forEach(base => {
     .addTo(map);
 });
 
-		
-				
-		
+
+
+
 const cities = [
 	// Монгол улс, аймгийн төвүүд
 	{ name: "Ulaanbaatar", lat: 47.8864, lon: 106.9057 },
@@ -253,7 +281,7 @@ const cities = [
     { name: "Choir (Gobisumber)", lat: 46.3611, lon: 108.3611 },
     { name: "Ereentsav", lat: 49.5242, lon: 116.7114 },
 	
-	//АНУ, муж улсуудын нийслэл
+	//АНУ, муж улсуудын нийслэл, хотууд
     { name: "New York", lat: 40.7128, lon: -74.0060 },
     { name: "Washington D.C.", lat: 38.8951, lon: -77.0364 },
     { name: "Los Angeles", lat: 34.0522, lon: -118.2437 },	
@@ -308,7 +336,7 @@ const cities = [
     { name: "Madison, WI", lat: 43.0731, lon: -89.4012 },
     { name: "Cheyenne, WY", lat: 41.1400, lon: -104.8202 },
 	
-	// Канад
+	// Канадын хотууд
 	{ name: "Ottawa, ON", lat: 45.4215, lon: -75.6972 },
     { name: "Toronto, ON", lat: 43.6532, lon: -79.3832 },
     { name: "Montreal, QC", lat: 45.5017, lon: -73.5673 },
@@ -330,7 +358,6 @@ const cities = [
 	
 ];
 
-// Хотуудыг зураг дээр дугуй цэгээр зурах
 cities.forEach(city => {
     L.circleMarker([city.lat, city.lon], {
         radius: 2,              // Цэгийн хэмжээ
@@ -347,7 +374,8 @@ cities.forEach(city => {
 
 
 
-// ЕВРОП ТИВ НИЙСЛЭЛҮҮД
+
+// Европ тив. Улсуудын нийслэл
 const europeanCapitals = [
     { name: "Tirana, Albania", lat: 41.3275, lon: 19.8187 },
     { name: "Andorra la Vella, Andorra", lat: 42.5063, lon: 1.5218 },
@@ -395,12 +423,9 @@ const europeanCapitals = [
     { name: "London, United Kingdom", lat: 51.5074, lon: -0.1278 },
     { name: "Kiev, Ukraine", lat: 50.4501, lon: 30.5234 },
     { name: "Vatican City", lat: 41.9029, lon: 12.4534 },
-
-	    // Бусад бүс нутаг
     { name: "Nuuk, Greenland", lat: 64.1835, lon: -51.7216 }
 ];
 
-// Хотуудыг нэмэх функц (Таны кодын cities массив дотор нэмж болно)
 europeanCapitals.forEach(city => {
     L.circleMarker([city.lat, city.lon], {
         radius: 2,
@@ -421,10 +446,10 @@ europeanCapitals.forEach(city => {
 
 
 
-// АЗИ ТИВ НИЙСЛЭЛҮҮД
+// Ази тив. Улсуудын нийслэл
 const asianCapitals = [
 
-	// --- ЯПОН УЛС (Томоохон хотууд) ---
+	// --- Япон (Томоохон хотууд) ---
     { name: "Tokyo, Japan", lat: 35.6762, lon: 139.6503 },
     { name: "Osaka, Japan", lat: 34.6937, lon: 135.5023 },
     { name: "Yokohama, Japan", lat: 35.4437, lon: 139.6389 },
@@ -435,7 +460,7 @@ const asianCapitals = [
     { name: "Kyoto, Japan", lat: 35.0116, lon: 135.7681 },
     { name: "Sendai, Japan", lat: 38.2682, lon: 140.8694 },
 
-    // --- ӨМНӨД СОЛОНГОС (Томоохон хотууд) ---
+    // --- ӨСолонгос (Томоохон хотууд) ---
     { name: "Seoul, South Korea", lat: 37.5665, lon: 126.9780 },
     { name: "Busan, South Korea", lat: 35.1796, lon: 129.0756 },
     { name: "Incheon, South Korea", lat: 37.4563, lon: 126.7052 },
@@ -445,7 +470,7 @@ const asianCapitals = [
     { name: "Ulsan, South Korea", lat: 35.5384, lon: 129.3114 },
     { name: "Jeju, South Korea", lat: 33.4996, lon: 126.5312 },
 
-    // --- ХЯТАД УЛС (Томоохон хотууд) ---
+    // --- Хятад (Томоохон хотууд) ---
     { name: "Beijing, China", lat: 39.9042, lon: 116.4074 },
     { name: "Shanghai, China", lat: 31.2304, lon: 121.4737 },
     { name: "Guangzhou, China", lat: 23.1291, lon: 113.2644 },
@@ -458,7 +483,7 @@ const asianCapitals = [
     { name: "Harbin, China", lat: 45.8038, lon: 126.5350 },
     { name: "Erenhot, China", lat: 43.6534, lon: 111.9740 },
 
-	// --- ОРОСЫН ХОЛБООНЫ УЛС (Томоохон хотууд) ---
+	// --- Орос (Томоохон хотууд) ---
     { name: "Moscow, Russia", lat: 55.7558, lon: 37.6173 },
     { name: "Saint Petersburg, Russia", lat: 59.9311, lon: 30.3609 },
     { name: "Novosibirsk, Russia", lat: 55.0084, lon: 82.9357 },
@@ -471,6 +496,7 @@ const asianCapitals = [
     { name: "Chelyabinsk, Russia", lat: 55.1644, lon: 61.4368 },
     { name: "Sochi, Russia", lat: 43.6028, lon: 39.7233 },
 	
+	// --- Ойрхи Дорнод, Төв Азийн улсуудын нийслэл
     { name: "Kabul, Afghanistan", lat: 34.5553, lon: 69.2075 },
     { name: "Yerevan, Armenia", lat: 40.1792, lon: 44.5152 },
     { name: "Baku, Azerbaijan", lat: 40.4093, lon: 49.8671 },
@@ -520,11 +546,10 @@ const asianCapitals = [
 
 ];
 
-// Зураг дээр тэмдэглэх функц
 asianCapitals.forEach(city => {
     L.circleMarker([city.lat, city.lon], {
         radius: 2,
-        fillColor: "#ffff00", // Азийн хотуудыг шар өнгөөр ялгав
+        fillColor: "#ffff00",
         color: "#fff",
         weight: 0,
         opacity: 0,
@@ -539,9 +564,11 @@ asianCapitals.forEach(city => {
 
 
 
-// ТӨВ АМЕРИК ТИВ НИЙСЛЭЛҮҮД
+
+// Төв Америк. Улсуудын нийслэл
 const centralAmericanCapitals = [
-    // Хойд Америк
+    
+	// Хойд Америк
     { name: "Mexico City, Mexico", lat: 19.4326, lon: -99.1332 },
 
     // Төв Америк
@@ -570,7 +597,6 @@ const centralAmericanCapitals = [
 
 ];
 
-// Зураг дээр тэмдэглэх функц
 centralAmericanCapitals.forEach(city => {
     L.circleMarker([city.lat, city.lon], {
         radius: 2,
@@ -590,7 +616,7 @@ centralAmericanCapitals.forEach(city => {
 
 
 
-// ӨМНӨД АМЕРИК ТИВ НИЙСЛЭЛҮҮД
+// Өмнөд Америк. Улсуудын нийслэл
 const southAmericanCapitals = [
     { name: "Buenos Aires, Argentina", lat: -34.6037, lon: -58.3816 },
     { name: "La Paz, Bolivia", lat: -16.4897, lon: -68.1193 },
@@ -611,7 +637,6 @@ const southAmericanCapitals = [
     { name: "Stanley, Falkland Islands", lat: -51.7000, lon: -57.8500 }
 ];
 
-// Зураг дээр тэмдэглэх функц
 southAmericanCapitals.forEach(city => {
     L.circleMarker([city.lat, city.lon], {
         radius: 2,
@@ -631,7 +656,7 @@ southAmericanCapitals.forEach(city => {
 
 
 
-// АФРИК ТИВ НИЙСЛЭЛҮҮД
+// Африк тив. Улсуудын нийслэл
 const africanCapitals = [
     { name: "Algiers, Algeria", lat: 36.7538, lon: 3.0588 },
     { name: "Luanda, Angola", lat: -8.8390, lon: 13.2345 },
@@ -688,7 +713,6 @@ const africanCapitals = [
     { name: "Harare, Zimbabwe", lat: -17.8252, lon: 31.0335 }
 ];
 
-// Зураг дээр тэмдэглэх функц
 africanCapitals.forEach(city => {
     L.circleMarker([city.lat, city.lon], {
         radius: 2,
@@ -708,7 +732,7 @@ africanCapitals.forEach(city => {
 
 	
 
-// АВСТРАЛИ/ДАЛАЙН ОРНУУД
+// Австрали, далайн улсуудын нийслэл
 const oceaniaCapitals = [
 
 	// --- АВСТРАЛИ УЛС (Мужийн төвүүд болон том хотууд) ---
@@ -749,7 +773,6 @@ const oceaniaCapitals = [
     { name: "Funafuti, Tuvalu", lat: -8.5167, lon: 179.2167 }
 ];
 
-// Зураг дээр тэмдэглэх функц
 oceaniaCapitals.forEach(city => {
     L.circleMarker([city.lat, city.lon], {
         radius: 2,
@@ -796,7 +819,7 @@ oceaniaCapitals.forEach(city => {
 
 
 
-
+// Сүүдрийн тохируулга
 let nightLayers = []; // Гурван давхаргыг хадгалах массив
 
 function updateSolarTerminator() {
@@ -832,7 +855,7 @@ function updateSolarTerminator() {
 
         const layer = L.polygon(nightPath, {
             fillColor: '#000',
-            fillOpacity: 0.5, // 0.7-оос бага зэрэг багасгавал газрын зураг илүү сайн харагдана
+            fillOpacity: 0.3, // 0.7-оос бага зэрэг багасгавал газрын зураг илүү сайн харагдана
             stroke: false,
             interactive: false
         }).addTo(map);
@@ -843,9 +866,6 @@ function updateSolarTerminator() {
     
     
     
-    
-    
-    
 
     function updateClocks() {
         const now = new Date();
@@ -853,7 +873,7 @@ function updateSolarTerminator() {
         // Update Central HUD
         const pad = (n) => n.toString().padStart(2, '0');
         document.getElementById('hud-date').innerText = now.toLocaleDateString('en-US', { 
-    month: 'long', 
+    month: 'short', 
     day: 'numeric', 
     year: 'numeric' 
 });
